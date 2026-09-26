@@ -14,31 +14,42 @@
   border: 1px solid var(--color-border);
   background: var(--color-surface);
   color: var(--color-text);
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 500;
   cursor: pointer;
-  transition: background-color 0.1s ease, border-color 0.1s ease;
+  transition: background-color 0.1s ease, border-color 0.1s ease, color 0.1s ease;
   white-space: nowrap;
 }
 .btn:hover {
-  background: var(--color-surface-alt);
+  background: var(--color-surface-hover);
+  border-color: var(--color-border-strong);
 }
 .btn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
+.btn:focus-visible {
+  outline: 2px solid var(--color-brand);
+  outline-offset: 1px;
+}
 .btn-primary {
   background: var(--color-brand);
   border-color: var(--color-brand);
-  color: var(--color-text-inverse);
+  color: var(--color-on-brand);
+  font-weight: 600;
 }
 .btn-primary:hover {
   background: var(--color-brand-strong);
+  border-color: var(--color-brand-strong);
 }
 .btn-danger {
   background: var(--color-danger);
   border-color: var(--color-danger);
   color: var(--color-text-inverse);
+}
+.btn-danger:hover {
+  background: #b91c1c;
+  border-color: #b91c1c;
 }
 .btn-ghost {
   background: transparent;
@@ -46,10 +57,11 @@
 }
 .btn-ghost:hover {
   background: var(--color-surface-alt);
+  border-color: transparent;
 }
 .btn-lg {
   height: var(--control-h-lg);
-  font-size: 18px;
+  font-size: 16px;
   border-radius: var(--radius-md);
   font-weight: 600;
 }
@@ -77,10 +89,19 @@
   background: var(--color-surface);
   color: var(--color-text);
   width: 100%;
+  transition: border-color 0.1s ease, box-shadow 0.1s ease;
+}
+.input::placeholder {
+  color: var(--color-text-faint);
 }
 .input:focus {
-  outline: 2px solid var(--color-brand);
-  outline-offset: -1px;
+  outline: none;
+  border-color: var(--color-brand);
+  box-shadow: 0 0 0 3px var(--color-brand-soft);
+}
+.input:disabled {
+  background: var(--color-surface-alt);
+  color: var(--color-text-muted);
 }
 
 label.field {
@@ -88,6 +109,7 @@ label.field {
   flex-direction: column;
   gap: var(--space-1);
   font-size: 13px;
+  font-weight: 500;
   color: var(--color-text-muted);
 }
 
@@ -98,34 +120,45 @@ label.field {
   padding: 0 var(--space-2);
   border-radius: 999px;
   font-size: 11px;
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: 0.02em;
   text-transform: uppercase;
+  border: 1px solid transparent;
 }
 .badge-sale {
   background: var(--color-danger-soft);
   color: var(--color-danger);
+  border-color: var(--color-danger-border);
 }
 .badge-new {
   background: var(--color-info-soft);
   color: var(--color-info);
+  border-color: var(--color-info-border);
 }
 .badge-low {
   background: var(--color-warning-soft);
   color: var(--color-warning);
+  border-color: var(--color-warning-border);
 }
 .badge-out {
-  background: var(--color-border);
+  background: var(--color-surface-alt);
   color: var(--color-text-muted);
+  border-color: var(--color-border);
 }
 .badge-neutral {
   background: var(--color-surface-alt);
   color: var(--color-text-muted);
+  border-color: var(--color-border);
+}
+.badge-success {
+  background: var(--color-success-soft);
+  color: var(--color-success);
+  border-color: var(--color-success-border);
 }
 
 .status-dot {
-  width: 8px;
-  height: 8px;
+  width: 7px;
+  height: 7px;
   border-radius: 50%;
   display: inline-block;
 }
@@ -142,33 +175,37 @@ label.field {
 table.table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 14px;
+  font-size: 13px;
 }
 table.table th {
   text-align: start;
   padding: var(--space-2) var(--space-3);
   color: var(--color-text-muted);
   font-weight: 600;
-  font-size: 12px;
+  font-size: 11px;
   text-transform: uppercase;
-  letter-spacing: 0.02em;
+  letter-spacing: 0.03em;
   border-bottom: 1px solid var(--color-border);
   position: sticky;
   top: 0;
-  background: var(--color-surface);
+  background: var(--color-surface-alt);
 }
 table.table td {
-  padding: var(--space-2) var(--space-3);
+  padding: var(--space-3);
   border-bottom: 1px solid var(--color-border);
+  color: var(--color-text);
 }
 table.table tbody tr:hover {
-  background: var(--color-surface-alt);
+  background: var(--color-surface-hover);
+}
+table.table tbody tr:last-child td {
+  border-bottom: none;
 }
 
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(20, 20, 25, 0.45);
+  background: rgba(15, 23, 42, 0.5);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -177,6 +214,7 @@ table.table tbody tr:hover {
 }
 .modal {
   background: var(--color-surface);
+  border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-md);
   max-height: 90vh;
@@ -193,7 +231,8 @@ table.table tbody tr:hover {
 }
 .modal-header h2 {
   margin: 0;
-  font-size: 18px;
+  font-size: 16px;
+  font-weight: 600;
 }
 .modal-body {
   padding: var(--space-4);
@@ -216,6 +255,7 @@ table.table tbody tr:hover {
   padding: var(--space-6);
   color: var(--color-text-muted);
   text-align: center;
+  font-size: 13px;
 }
 
 .toolbar {
@@ -226,7 +266,7 @@ table.table tbody tr:hover {
 }
 
 .page {
-  padding: var(--space-4);
+  padding: var(--space-4) var(--space-5);
   height: 100%;
   overflow-y: auto;
 }
@@ -239,8 +279,10 @@ table.table tbody tr:hover {
   flex-wrap: wrap;
 }
 .page-header h1 {
-  font-size: 22px;
+  font-size: 20px;
+  font-weight: 600;
   margin: 0;
+  letter-spacing: -0.01em;
 }
 
 .kpi-grid {
@@ -250,18 +292,22 @@ table.table tbody tr:hover {
   margin-bottom: var(--space-4);
 }
 .kpi-card {
-  padding: var(--space-3);
+  padding: var(--space-3) var(--space-4);
 }
 .kpi-card .kpi-label {
-  font-size: 12px;
+  font-size: 11px;
+  font-weight: 600;
   color: var(--color-text-muted);
   text-transform: uppercase;
-  letter-spacing: 0.02em;
+  letter-spacing: 0.04em;
 }
 .kpi-card .kpi-value {
-  font-size: 26px;
-  font-weight: 700;
+  font-size: 24px;
+  font-weight: 600;
   margin-top: var(--space-1);
+  color: var(--color-text);
+  letter-spacing: -0.01em;
+  font-variant-numeric: tabular-nums;
 }
 
 .form-grid-2 {
@@ -274,13 +320,17 @@ table.table tbody tr:hover {
   align-items: center;
   gap: var(--space-2);
   font-size: 14px;
+  color: var(--color-text);
 }
 .variant-editor-group {
-  padding: var(--space-2);
+  padding: var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
   display: flex;
   flex-direction: column;
   gap: var(--space-2);
   margin-top: var(--space-2);
+  background: var(--color-surface-alt);
 }
 
 .text-muted {
@@ -292,12 +342,16 @@ table.table tbody tr:hover {
 .text-success {
   color: var(--color-success);
 }
+.mono {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
 
 .spinner {
-  width: 20px;
-  height: 20px;
+  width: 18px;
+  height: 18px;
   border: 2px solid var(--color-border);
-  border-top-color: var(--color-brand);
+  border-top-color: var(--color-brand-strong);
   border-radius: 50%;
   animation: spin 0.7s linear infinite;
 }
@@ -305,7 +359,7 @@ table.table tbody tr:hover {
   display: flex;
   align-items: center;
   gap: var(--space-1);
-  font-size: 14px;
+  font-size: 13px;
 }
 .spin {
   animation: spin 0.9s linear infinite;

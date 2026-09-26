@@ -68,7 +68,8 @@
 .chip-active {
   background: var(--color-brand);
   border-color: var(--color-brand);
-  color: #fff;
+  color: var(--color-on-brand);
+  font-weight: 600;
 }
 .chip-removable {
   display: inline-flex;

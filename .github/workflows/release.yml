@@ -100,6 +100,7 @@ jobs:
           pkg="pos-${{ matrix.name }}"
           mkdir -p "$pkg/frontend"
           cp -r migrations "$pkg/migrations"
+          cp -r assets "$pkg/assets"
           cp -r frontend/dist "$pkg/frontend/dist"
           cp "stage/pos${{ matrix.ext }}" "$pkg/"
           cat > "$pkg/README.txt" <<'EOF'
