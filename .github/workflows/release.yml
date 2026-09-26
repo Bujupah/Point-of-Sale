@@ -1,0 +1,172 @@
+name: Release
+
+# Builds native (not cross-compiled) CGO binaries on each target OS's own
+# runner — mattn/go-sqlite3 needs a real C toolchain, and every GitHub
+# runner image ships one for its own platform, so there is no need to fight
+# a Windows/macOS cross-compiler from Linux. Each job builds only for its
+# own OS/arch, then a final job collects every archive into one release.
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Version tag to release (e.g. v0.1.0) — only needed when run manually instead of by pushing a tag"
+        required: false
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: windows-amd64
+            os: windows-latest
+            goos: windows
+            goarch: amd64
+            ext: .exe
+            archive: zip
+          - name: linux-amd64
+            os: ubuntu-latest
+            goos: linux
+            goarch: amd64
+            ext: ""
+            archive: tar.gz
+          - name: darwin-amd64
+            os: macos-13
+            goos: darwin
+            goarch: amd64
+            ext: ""
+            archive: tar.gz
+          - name: darwin-arm64
+            os: macos-14
+            goos: darwin
+            goarch: arm64
+            ext: ""
+            archive: tar.gz
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      # GitHub's windows-latest image includes MinGW-w64 for exactly this
+      # (CGO on Windows) but not always on PATH by default; make sure gcc
+      # resolves before the Go build step needs it.
+      - name: Ensure MinGW gcc is on PATH (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $gccDir = "C:\ProgramData\chocolatey\lib\mingw\tools\install\mingw64\bin"
+          if (-not (Test-Path $gccDir)) {
+            choco install mingw --no-progress -y
+          }
+          echo "C:\ProgramData\chocolatey\lib\mingw\tools\install\mingw64\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+
+      - name: Build frontend
+        working-directory: frontend
+        run: |
+          npm ci
+          npm run build
+
+      - name: Build backend
+        env:
+          CGO_ENABLED: "1"
+          GOOS: ${{ matrix.goos }}
+          GOARCH: ${{ matrix.goarch }}
+        shell: bash
+        run: |
+          mkdir -p stage
+          go build -trimpath -ldflags "-s -w" -o "stage/pos${{ matrix.ext }}" ./cmd/pos
+
+      - name: Assemble release package
+        shell: bash
+        run: |
+          set -euo pipefail
+          pkg="pos-${{ matrix.name }}"
+          mkdir -p "$pkg/frontend"
+          cp -r migrations "$pkg/migrations"
+          cp -r frontend/dist "$pkg/frontend/dist"
+          cp "stage/pos${{ matrix.ext }}" "$pkg/"
+          cat > "$pkg/README.txt" <<'EOF'
+          Point of Sale — ${{ matrix.name }} build
+
+          Quick start:
+            1. Keep this folder's layout as-is (pos binary next to migrations/
+               and frontend/dist/).
+            2. Run the "pos" binary (or pos.exe on Windows) from inside this
+               folder.
+            3. Open http://127.0.0.1:17831 in a browser.
+            4. Default demo accounts: admin/1234 (Admin), cashier/1111 (Cashier)
+               — change these immediately in a real deployment.
+
+          data/, logs/ and backups/ are created next to the binary on first run.
+          See docs/00-xp-compatibility-report.md and
+          docs/01-architecture-and-repo-structure.md in the source repository
+          for the full architecture and platform-support notes.
+          EOF
+          if [ "${{ matrix.archive }}" = "zip" ]; then
+            7z a -tzip "${pkg}.zip" "$pkg" >/dev/null
+            echo "ASSET=${pkg}.zip" >> "$GITHUB_ENV"
+          else
+            tar -czf "${pkg}.tar.gz" "$pkg"
+            echo "ASSET=${pkg}.tar.gz" >> "$GITHUB_ENV"
+          fi
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.name }}
+          path: ${{ env.ASSET }}
+          if-no-files-found: error
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+          merge-multiple: true
+
+      - name: Determine version
+        id: version
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            version="${{ inputs.version }}"
+            if [ -z "$version" ]; then
+              echo "workflow_dispatch requires a version input when not triggered by a tag push" >&2
+              exit 1
+            fi
+          else
+            version="${{ github.ref_name }}"
+          fi
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+
+      - name: Create release and upload assets
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          set -euo pipefail
+          ls -la artifacts
+          if gh release view "$VERSION" --repo "${{ github.repository }}" >/dev/null 2>&1; then
+            gh release upload "$VERSION" artifacts/* --repo "${{ github.repository }}" --clobber
+          else
+            gh release create "$VERSION" artifacts/* \
+              --repo "${{ github.repository }}" \
+              --title "Point of Sale $VERSION" \
+              --generate-notes
+          fi
