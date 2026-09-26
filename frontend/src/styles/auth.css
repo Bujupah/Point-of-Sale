@@ -1,0 +1,61 @@
+.auth-screen {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-bg);
+}
+.auth-card {
+  width: 360px;
+  padding: var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+.auth-title {
+  font-size: 20px;
+  text-align: center;
+  margin: 0;
+}
+.auth-error {
+  background: var(--color-danger-soft);
+  color: var(--color-danger);
+  padding: var(--space-2);
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  text-align: center;
+}
+.auth-hint {
+  text-align: center;
+  font-size: 12px;
+}
+.pin-display {
+  text-align: center;
+  letter-spacing: 8px;
+  font-size: 20px;
+}
+.lock-avatar {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--color-brand-soft);
+  color: var(--color-brand-strong);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 22px;
+  margin: 0 auto;
+}
+
+.numeric-keypad {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-2);
+}
+.keypad-key {
+  height: 52px;
+  font-size: 18px;
+  font-weight: 600;
+}
