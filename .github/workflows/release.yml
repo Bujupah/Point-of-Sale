@@ -165,8 +165,13 @@ jobs:
           if gh release view "$VERSION" --repo "${{ github.repository }}" >/dev/null 2>&1; then
             gh release upload "$VERSION" artifacts/* --repo "${{ github.repository }}" --clobber
           else
+            # --target pins the tag (created here if it doesn't exist yet)
+            # to the commit this workflow actually ran on — needed because
+            # a workflow_dispatch run has no pre-existing tag to anchor to,
+            # and would otherwise default to the repo's default branch tip.
             gh release create "$VERSION" artifacts/* \
               --repo "${{ github.repository }}" \
+              --target "${{ github.sha }}" \
               --title "Point of Sale $VERSION" \
               --generate-notes
           fi
