@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { StickyNote, Minus, Plus, Trash2 } from 'lucide-react'
 import { useSettings } from '../../app/SettingsContext'
 import { formatMoney } from '../../utils/money'
 import { unitPriceOf } from '../../utils/pricing'
@@ -36,21 +37,21 @@ export function CartItemRow({ line, lineTotal }: { line: CartLine; lineTotal: nu
           />
         ) : (
           <button className="cart-row-note-btn text-muted" onClick={() => setEditingNote(true)}>
-            {line.notes ? `📝 ${line.notes}` : '+ note'}
+            {line.notes ? <><StickyNote size={12} /> {line.notes}</> : '+ note'}
           </button>
         )}
       </div>
       <div className="cart-row-qty">
-        <button className="btn btn-icon" onClick={() => updateQuantity(line.lineId, line.quantity - 1)}>−</button>
+        <button className="btn btn-icon" onClick={() => updateQuantity(line.lineId, line.quantity - 1)}><Minus size={16} /></button>
         <span>{line.quantity}</span>
-        <button className="btn btn-icon" onClick={() => updateQuantity(line.lineId, line.quantity + 1)}>+</button>
+        <button className="btn btn-icon" onClick={() => updateQuantity(line.lineId, line.quantity + 1)}><Plus size={16} /></button>
       </div>
       <div className="cart-row-price">
         <div>{formatMoney(lineTotal, currencyDecimals, currencySymbol)}</div>
         <div className="text-muted cart-row-unit">{formatMoney(unitPrice, currencyDecimals, currencySymbol)} ea</div>
       </div>
       <button className="btn btn-icon btn-ghost cart-row-delete" onClick={() => removeLine(line.lineId)} title="Remove">
-        🗑
+        <Trash2 size={16} />
       </button>
     </div>
   )

@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { X } from 'lucide-react'
 import { useSettings } from '../../app/SettingsContext'
 import { api, ApiError } from '../../services/api'
 import { formatMoney, parseMoneyInput } from '../../utils/money'
@@ -92,7 +93,7 @@ export function ProductEditModal({ product, onClose, onSaved }: { product?: Prod
       <div className="modal" style={{ maxWidth: 560 }} onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
           <h2>{product ? 'Edit Product' : 'New Product'}</h2>
-          <button className="btn btn-icon btn-ghost" onClick={onClose}>✕</button>
+          <button className="btn btn-icon btn-ghost" onClick={onClose}><X size={18} /></button>
         </div>
         <div className="modal-body stack">
           <div className="form-grid-2">
@@ -139,7 +140,9 @@ export function ProductEditModal({ product, onClose, onSaved }: { product?: Prod
             </div>
             <div className="toolbar" style={{ marginTop: 8 }}>
               {barcodes.map((b) => (
-                <span key={b} className="chip chip-active" onClick={() => setBarcodes((bc) => bc.filter((x) => x !== b))}>{b} ✕</span>
+                <span key={b} className="chip chip-active chip-removable" onClick={() => setBarcodes((bc) => bc.filter((x) => x !== b))}>
+                  {b} <X size={13} />
+                </span>
               ))}
             </div>
           </div>

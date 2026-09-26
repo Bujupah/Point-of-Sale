@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { X } from 'lucide-react'
 import { useI18n } from '../../i18n'
 import { useSettings } from '../../app/SettingsContext'
 import { api, ApiError } from '../../services/api'
@@ -30,7 +31,7 @@ export function CashMovementModal({ type, onClose, onDone }: { type: 'CASH_IN' |
       <div className="modal" style={{ maxWidth: 360 }} onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
           <h2>{type === 'CASH_IN' ? t('shift_cash_in') : t('shift_cash_out')}</h2>
-          <button className="btn btn-icon btn-ghost" onClick={onClose}>✕</button>
+          <button className="btn btn-icon btn-ghost" onClick={onClose}><X size={18} /></button>
         </div>
         <div className="modal-body stack">
           <label className="field">

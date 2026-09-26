@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Check } from 'lucide-react'
 import { useI18n, type Language } from '../../i18n'
 import { useAuth } from '../../app/AuthContext'
 import { useSettings } from '../../app/SettingsContext'
@@ -55,7 +56,7 @@ export function StoreSettingsTab() {
         <label className="field">Loyalty points per 100 spent<input className="input" disabled={!canWrite} value={loyaltyRate} onChange={(e) => setLoyaltyRate(e.target.value)} /></label>
         <label className="field">Cashier discount limit (%)<input className="input" disabled={!canWrite} value={discountLimit} onChange={(e) => setDiscountLimit(e.target.value)} /></label>
         {canWrite && (
-          <button className="btn btn-primary" onClick={submit}>{saved ? 'Saved ✓' : t('common_save')}</button>
+          <button className="btn btn-primary" onClick={submit}>{saved ? <><Check size={16} /> Saved</> : t('common_save')}</button>
         )}
       </div>
     </div>

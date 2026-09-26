@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react'
+import { X, Minus, Plus } from 'lucide-react'
 import { useSettings } from '../../app/SettingsContext'
 import { formatMoney } from '../../utils/money'
 import type { CartModifierSelection, CartVariantSelection, ModifierGroup, Product, Variant, VariantGroup } from '../../types'
@@ -85,7 +86,7 @@ export function VariantModal({ product, onConfirm, onClose }: Props) {
       <div className="modal" style={{ maxWidth: 480 }} onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
           <h2>{product.name}</h2>
-          <button className="btn btn-icon btn-ghost" onClick={onClose}>✕</button>
+          <button className="btn btn-icon btn-ghost" onClick={onClose}><X size={18} /></button>
         </div>
         <div className="modal-body variant-modal-body">
           {variantGroups.map((g) => (
@@ -135,9 +136,9 @@ export function VariantModal({ product, onConfirm, onClose }: Props) {
           </label>
 
           <div className="qty-row">
-            <button className="btn btn-icon" onClick={() => setQuantity((q) => Math.max(1, q - 1))}>−</button>
+            <button className="btn btn-icon" onClick={() => setQuantity((q) => Math.max(1, q - 1))}><Minus size={16} /></button>
             <span className="qty-value">{quantity}</span>
-            <button className="btn btn-icon" onClick={() => setQuantity((q) => q + 1)}>+</button>
+            <button className="btn btn-icon" onClick={() => setQuantity((q) => q + 1)}><Plus size={16} /></button>
           </div>
         </div>
         <div className="modal-footer">

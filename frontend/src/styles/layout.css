@@ -58,10 +58,11 @@
   color: var(--color-brand-strong);
 }
 .sidebar-icon {
-  font-size: 18px;
   width: 24px;
-  text-align: center;
   flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 .sidebar-label {
   white-space: nowrap;

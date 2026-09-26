@@ -1,26 +1,29 @@
 import { useState } from 'react'
+import { CheckCircle2, XCircle, Loader2 } from 'lucide-react'
 import { api, ApiError } from '../../services/api'
 
+type Status = { kind: 'idle' } | { kind: 'busy'; message: string } | { kind: 'success'; message: string } | { kind: 'error'; message: string }
+
 export function PrintersTab() {
-  const [status, setStatus] = useState('')
+  const [status, setStatus] = useState<Status>({ kind: 'idle' })
 
   async function test() {
-    setStatus('Testing...')
+    setStatus({ kind: 'busy', message: 'Testing...' })
     try {
       await api.post('/api/hardware/printer/test')
-      setStatus('Test page sent ✓')
+      setStatus({ kind: 'success', message: 'Test page sent' })
     } catch (err) {
-      setStatus(err instanceof ApiError ? `Error: ${err.message}` : 'Printer test failed')
+      setStatus({ kind: 'error', message: err instanceof ApiError ? err.message : 'Printer test failed' })
     }
   }
 
   async function drawer() {
-    setStatus('Opening drawer...')
+    setStatus({ kind: 'busy', message: 'Opening drawer...' })
     try {
       await api.post('/api/hardware/drawer/open')
-      setStatus('Drawer opened ✓')
+      setStatus({ kind: 'success', message: 'Drawer opened' })
     } catch (err) {
-      setStatus(err instanceof ApiError ? `Error: ${err.message}` : 'Drawer open failed')
+      setStatus({ kind: 'error', message: err instanceof ApiError ? err.message : 'Drawer open failed' })
     }
   }
 
@@ -35,7 +38,14 @@ export function PrintersTab() {
           <button className="btn" onClick={test}>Test Print</button>
           <button className="btn" onClick={drawer}>Open Drawer</button>
         </div>
-        {status && <div className="text-muted">{status}</div>}
+        {status.kind !== 'idle' && (
+          <div className={`status-message ${status.kind === 'error' ? 'text-danger' : status.kind === 'success' ? 'text-success' : 'text-muted'}`}>
+            {status.kind === 'busy' && <Loader2 size={16} className="spin" />}
+            {status.kind === 'success' && <CheckCircle2 size={16} />}
+            {status.kind === 'error' && <XCircle size={16} />}
+            {status.message}
+          </div>
+        )}
       </div>
     </div>
   )

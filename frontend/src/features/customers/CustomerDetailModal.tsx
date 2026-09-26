@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { X } from 'lucide-react'
 import { useSettings } from '../../app/SettingsContext'
 import { api } from '../../services/api'
 import { formatMoney } from '../../utils/money'
@@ -42,7 +43,7 @@ export function CustomerDetailModal({ customer, onClose, onChanged }: { customer
       <div className="modal" style={{ maxWidth: 460 }} onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
           <h2>{current.name}</h2>
-          <button className="btn btn-icon btn-ghost" onClick={onClose}>✕</button>
+          <button className="btn btn-icon btn-ghost" onClick={onClose}><X size={18} /></button>
         </div>
         <div className="modal-body stack">
           <div className="summary-row"><span>Phone</span><span>{current.phone || '—'}</span></div>

@@ -27,6 +27,7 @@ type Config struct {
 	Logging    LoggingConfig  `json:"logging"`
 	Migrations string         `json:"migrations_path"`
 	Frontend   string         `json:"frontend_path"`
+	Assets     string         `json:"assets_path"`
 }
 
 func Default() Config {
@@ -36,6 +37,7 @@ func Default() Config {
 		Logging:    LoggingConfig{Path: "./logs/pos.log"},
 		Migrations: "./migrations",
 		Frontend:   "./frontend/dist",
+		Assets:     "./assets",
 	}
 }
 

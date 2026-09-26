@@ -1,3 +1,5 @@
+import { X } from 'lucide-react'
+
 const shortcuts: [string, string][] = [
   ['F1', 'Search'],
   ['F2', 'Focus scanner/search'],
@@ -22,7 +24,7 @@ export function ShortcutHelpOverlay({ onClose }: { onClose: () => void }) {
       <div className="modal" style={{ maxWidth: 420 }} onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
           <h2>Keyboard Shortcuts</h2>
-          <button className="btn btn-icon btn-ghost" onClick={onClose}>✕</button>
+          <button className="btn btn-icon btn-ghost" onClick={onClose}><X size={18} /></button>
         </div>
         <div className="modal-body">
           <table className="table">

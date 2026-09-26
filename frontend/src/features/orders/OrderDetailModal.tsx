@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { X } from 'lucide-react'
 import { useSettings } from '../../app/SettingsContext'
 import { useAuth } from '../../app/AuthContext'
 import { api, ApiError } from '../../services/api'
@@ -26,7 +27,7 @@ export function OrderDetailModal({ sale, onClose, onChanged }: { sale: Sale; onC
       <div className="modal" style={{ maxWidth: 480 }} onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
           <h2>{sale.receipt_number}</h2>
-          <button className="btn btn-icon btn-ghost" onClick={onClose}>✕</button>
+          <button className="btn btn-icon btn-ghost" onClick={onClose}><X size={18} /></button>
         </div>
         <div className="modal-body stack">
           <div className="summary-row"><span>Status</span><span>{sale.status}</span></div>

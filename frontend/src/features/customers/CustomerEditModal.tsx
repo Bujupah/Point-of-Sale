@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { X } from 'lucide-react'
 import { api, ApiError } from '../../services/api'
 import type { Customer } from '../../types'
 
@@ -29,7 +30,7 @@ export function CustomerEditModal({ customer, onClose, onSaved }: { customer?: C
       <div className="modal" style={{ maxWidth: 400 }} onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
           <h2>{customer ? 'Edit Customer' : 'Add Customer'}</h2>
-          <button className="btn btn-icon btn-ghost" onClick={onClose}>✕</button>
+          <button className="btn btn-icon btn-ghost" onClick={onClose}><X size={18} /></button>
         </div>
         <div className="modal-body stack">
           <label className="field">Name<input className="input" value={name} onChange={(e) => setName(e.target.value)} autoFocus /></label>

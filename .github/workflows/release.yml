@@ -5,6 +5,13 @@ name: Release
 # runner image ships one for its own platform, so there is no need to fight
 # a Windows/macOS cross-compiler from Linux. Each job builds only for its
 # own OS/arch, then a final job collects every archive into one release.
+#
+# No Intel-Mac (darwin-amd64) target: the macos-13 runner queued for over
+# 30 minutes with no sign of being scheduled while every other job in the
+# same run finished in under three, so it was dropped rather than block
+# every release on one flaky runner pool. Re-add a `macos-13`/`macos-13-xlarge`
+# matrix entry if Intel Mac support becomes worth the wait again — Apple
+# Silicon (darwin-arm64) already covers current Mac hardware.
 on:
   push:
     tags:
@@ -34,12 +41,6 @@ jobs:
           - name: linux-amd64
             os: ubuntu-latest
             goos: linux
-            goarch: amd64
-            ext: ""
-            archive: tar.gz
-          - name: darwin-amd64
-            os: macos-13
-            goos: darwin
             goarch: amd64
             ext: ""
             archive: tar.gz

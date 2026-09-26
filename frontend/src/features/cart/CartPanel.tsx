@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react'
+import { MoreVertical, X, StickyNote } from 'lucide-react'
 import { useI18n } from '../../i18n'
 import { useSettings } from '../../app/SettingsContext'
 import { useSell } from '../../app/SellContext'
@@ -50,7 +51,7 @@ export function CartPanel({ onCharge }: { onCharge: (totals: ReturnType<typeof c
           <div className="text-muted">{lines.length} {t('cart_items')}</div>
         </div>
         <div className="cart-menu-wrap">
-          <button className="btn btn-icon btn-ghost" onClick={() => setMenuOpen((o) => !o)}>⋯</button>
+          <button className="btn btn-icon btn-ghost" onClick={() => setMenuOpen((o) => !o)}><MoreVertical size={18} /></button>
           {menuOpen && (
             <div className="dropdown">
               <button className="dropdown-item" disabled={!hasPermission('sale.hold') || lines.length === 0} onClick={() => { setMenuOpen(false); holdCart(orderNote, '') }}>
@@ -85,7 +86,7 @@ export function CartPanel({ onCharge }: { onCharge: (totals: ReturnType<typeof c
                 setCustomer(null)
               }}
             >
-              ✕
+              <X size={16} />
             </button>
           </>
         ) : (
@@ -108,7 +109,7 @@ export function CartPanel({ onCharge }: { onCharge: (totals: ReturnType<typeof c
         />
       ) : (
         <button className="order-note-btn" onClick={() => setNoteEditing(true)}>
-          {orderNote ? `📝 ${orderNote}` : `+ ${t('cart_add_note')}`}
+          {orderNote ? <><StickyNote size={13} /> {orderNote}</> : `+ ${t('cart_add_note')}`}
         </button>
       )}
 

@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { Volume2, VolumeX, Keyboard } from 'lucide-react'
 import { useI18n, type Language } from '../i18n'
 import { useAuth } from './AuthContext'
 import { useSettings } from './SettingsContext'
@@ -48,7 +49,7 @@ export function TopBar({ onLock }: { onLock: () => void }) {
               setSoundEnabled(e.target.checked)
             }}
           />
-          {soundOn ? '🔊' : '🔇'}
+          {soundOn ? <Volume2 size={18} /> : <VolumeX size={18} />}
         </label>
 
         <select
@@ -63,7 +64,7 @@ export function TopBar({ onLock }: { onLock: () => void }) {
         </select>
 
         <button className="btn btn-icon btn-ghost" title="Keyboard shortcuts" onClick={() => setHelpOpen(true)}>
-          ⌨
+          <Keyboard size={18} />
         </button>
 
         <div className="cashier-menu" ref={menuRef}>

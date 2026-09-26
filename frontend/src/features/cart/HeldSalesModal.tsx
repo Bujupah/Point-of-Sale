@@ -1,4 +1,5 @@
 import { useSettings } from '../../app/SettingsContext'
+import { X } from 'lucide-react'
 import { useSell } from '../../app/SellContext'
 import { formatMoney } from '../../utils/money'
 
@@ -11,7 +12,7 @@ export function HeldSalesModal({ onClose }: { onClose: () => void }) {
       <div className="modal" style={{ maxWidth: 560 }} onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
           <h2>Held Sales</h2>
-          <button className="btn btn-icon btn-ghost" onClick={onClose}>✕</button>
+          <button className="btn btn-icon btn-ghost" onClick={onClose}><X size={18} /></button>
         </div>
         <div className="modal-body">
           {heldSales.length === 0 && <div className="empty-state">No held sales.</div>}

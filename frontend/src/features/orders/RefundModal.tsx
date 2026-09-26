@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { X } from 'lucide-react'
 import { useSettings } from '../../app/SettingsContext'
 import { api, ApiError } from '../../services/api'
 import { formatMoney } from '../../utils/money'
@@ -51,7 +52,7 @@ export function RefundModal({ sale, onClose, onDone }: { sale: Sale; onClose: ()
       <div className="modal" style={{ maxWidth: 460 }} onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
           <h2>Refund {sale.receipt_number}</h2>
-          <button className="btn btn-icon btn-ghost" onClick={onClose}>✕</button>
+          <button className="btn btn-icon btn-ghost" onClick={onClose}><X size={18} /></button>
         </div>
         <div className="modal-body stack">
           {items.map((it) => (

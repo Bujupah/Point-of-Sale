@@ -70,6 +70,11 @@
   border-color: var(--color-brand);
   color: #fff;
 }
+.chip-removable {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+}
 
 .product-grid-scroll {
   flex: 1;
@@ -199,6 +204,11 @@
   cursor: pointer;
   color: var(--color-text-muted);
 }
+.order-note-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
 .cart-lines {
   flex: 1;
   overflow-y: auto;
@@ -231,6 +241,11 @@
   padding: 0;
   text-align: start;
   cursor: pointer;
+}
+.cart-row-note-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
 }
 .cart-row-qty {
   display: flex;

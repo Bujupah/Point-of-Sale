@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { CheckCircle2 } from 'lucide-react'
 import { useI18n } from '../../i18n'
 import { useSettings } from '../../app/SettingsContext'
 import { api, ApiError } from '../../services/api'
@@ -33,7 +34,7 @@ export function SaleCompleteScreen({ sale, printError, onNewSale }: { sale: Sale
     <div className="modal-overlay">
       <div className="modal" style={{ maxWidth: 420 }}>
         <div className="modal-body sale-complete">
-          <div className="sale-complete-icon">✅</div>
+          <div className="sale-complete-icon"><CheckCircle2 size={48} className="text-success" /></div>
           <h2>{t('sale_success')}</h2>
           <div className="text-muted">{sale.receipt_number}</div>
 

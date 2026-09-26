@@ -301,13 +301,23 @@ table.table tbody tr:hover {
   border-radius: 50%;
   animation: spin 0.7s linear infinite;
 }
+.status-message {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-size: 14px;
+}
+.spin {
+  animation: spin 0.9s linear infinite;
+}
 @keyframes spin {
   to {
     transform: rotate(360deg);
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  .spinner {
+  .spinner,
+  .spin {
     animation: none;
   }
 }

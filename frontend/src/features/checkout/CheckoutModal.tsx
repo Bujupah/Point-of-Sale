@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react'
+import { X, Banknote, CreditCard, Landmark, Gift, MoreHorizontal, CheckCircle2 } from 'lucide-react'
 import { useI18n } from '../../i18n'
 import { useSettings } from '../../app/SettingsContext'
 import { useSell } from '../../app/SellContext'
@@ -76,7 +77,7 @@ export function CheckoutModal({
       <div className="modal checkout-modal">
         <div className="modal-header">
           <h2>{t('payment_amount_due')}</h2>
-          <button className="btn btn-icon btn-ghost" onClick={onClose} disabled={submitting}>✕</button>
+          <button className="btn btn-icon btn-ghost" onClick={onClose} disabled={submitting}><X size={18} /></button>
         </div>
         <div className="modal-body checkout-body">
           <div className="checkout-amount-due">{formatMoney(remaining, currencyDecimals, currencySymbol)}</div>
@@ -88,7 +89,7 @@ export function CheckoutModal({
                 <div key={i} className="payment-list-row">
                   <span>{methodLabel(p.method, t)}</span>
                   <span>{formatMoney(p.amount, currencyDecimals, currencySymbol)}</span>
-                  <button className="btn btn-icon btn-ghost" onClick={() => removePayment(i)}>✕</button>
+                  <button className="btn btn-icon btn-ghost" onClick={() => removePayment(i)}><X size={18} /></button>
                 </div>
               ))}
               <div className="payment-list-row text-muted">
@@ -107,16 +108,16 @@ export function CheckoutModal({
                 </div>
               )}
               <button className="btn btn-primary btn-lg btn-block" disabled={submitting} onClick={complete}>
-                {submitting ? t('common_loading') : t('payment_complete')}
+                {submitting ? t('common_loading') : <><CheckCircle2 size={20} /> {t('payment_complete')}</>}
               </button>
             </div>
           ) : activeTab === null ? (
             <div className="method-grid">
-              <button className="btn btn-lg method-btn" onClick={() => setActiveTab('CASH')}>💵 {t('payment_cash')}</button>
-              <button className="btn btn-lg method-btn" onClick={() => setActiveTab('CARD')}>💳 {t('payment_card')}</button>
-              <button className="btn btn-lg method-btn" onClick={() => setActiveTab('BANK_TRANSFER')}>🏦 {t('payment_transfer')}</button>
-              <button className="btn btn-lg method-btn" onClick={() => setActiveTab('GIFT_CARD')}>🎁 {t('payment_gift_card')}</button>
-              <button className="btn btn-lg method-btn" onClick={() => setActiveTab('OTHER')}>⋯ {t('payment_other')}</button>
+              <button className="btn btn-lg method-btn" onClick={() => setActiveTab('CASH')}><Banknote size={20} /> {t('payment_cash')}</button>
+              <button className="btn btn-lg method-btn" onClick={() => setActiveTab('CARD')}><CreditCard size={20} /> {t('payment_card')}</button>
+              <button className="btn btn-lg method-btn" onClick={() => setActiveTab('BANK_TRANSFER')}><Landmark size={20} /> {t('payment_transfer')}</button>
+              <button className="btn btn-lg method-btn" onClick={() => setActiveTab('GIFT_CARD')}><Gift size={20} /> {t('payment_gift_card')}</button>
+              <button className="btn btn-lg method-btn" onClick={() => setActiveTab('OTHER')}><MoreHorizontal size={20} /> {t('payment_other')}</button>
             </div>
           ) : (
             <MethodPanel
@@ -213,54 +214,34 @@ function CashPanel({ remaining, decimals, symbol, onCancel, onConfirm }: { remai
   )
 }
 
+// CardPanel does not talk to a payment terminal — there is no terminal SDK
+// integration in this build (brief's own "future hardware integrations must
+// implement an adapter" note). Rather than fake that connection with a
+// timed spinner and a scripted "Approved" outcome, this panel reflects what
+// actually happens with a standalone/unintegrated terminal: the cashier
+// runs the transaction on the physical device and reports its real result
+// here. Nothing about the outcome is invented by the software.
 function CardPanel({ remaining, decimals, symbol, onCancel, onConfirm }: { remaining: number; decimals: number; symbol: string; onCancel: () => void; onConfirm: (p: PendingPayment) => void }) {
   const { t } = useI18n()
-  const [state, setState] = useState<'idle' | 'waiting' | 'processing' | 'approved' | 'declined'>('idle')
-
-  function charge() {
-    setState('waiting')
-    setTimeout(() => setState('processing'), 500)
-    setTimeout(() => setState('approved'), 1400)
-  }
-
-  if (state === 'approved') {
-    return (
-      <div className="stack terminal-state">
-        <div className="terminal-icon">✅</div>
-        <div>Approved — {formatMoney(remaining, decimals, symbol)}</div>
-        <button className="btn btn-primary btn-block" onClick={() => onConfirm({ method: 'CARD', amount: remaining, reference: `SIM-${Date.now()}` })}>
-          {t('common_confirm')}
-        </button>
-      </div>
-    )
-  }
-
-  if (state === 'waiting' || state === 'processing') {
-    return (
-      <div className="stack terminal-state">
-        <div className="spinner" />
-        <div>{state === 'waiting' ? 'Waiting for terminal…' : 'Processing…'}</div>
-      </div>
-    )
-  }
-
-  if (state === 'declined') {
-    return (
-      <div className="stack terminal-state">
-        <div className="terminal-icon text-danger">✕</div>
-        <div>Declined</div>
-        <button className="btn btn-block" onClick={() => setState('idle')}>Retry</button>
-        <button className="btn btn-block" onClick={onCancel}>{t('common_cancel')}</button>
-      </div>
-    )
-  }
+  const [reference, setReference] = useState('')
+  const [declined, setDeclined] = useState(false)
 
   return (
     <div className="stack terminal-state">
-      <div>Card terminal: {formatMoney(remaining, decimals, symbol)}</div>
-      <button className="btn btn-primary btn-block" onClick={charge}>Charge Card</button>
-      <button className="btn btn-block" onClick={() => setState('declined')}>Simulate Decline</button>
-      <button className="btn btn-ghost btn-block" onClick={onCancel}>{t('common_cancel')}</button>
+      <CreditCard size={32} className="text-muted" />
+      <div>Charge {formatMoney(remaining, decimals, symbol)} on the card terminal, then record the result below.</div>
+      <label className="field">
+        Terminal reference / auth code (optional)
+        <input className="input" value={reference} onChange={(e) => setReference(e.target.value)} placeholder="From the terminal receipt" autoFocus />
+      </label>
+      {declined && <div className="auth-error">Recorded as declined. Try again on the terminal, or choose a different payment method.</div>}
+      <div className="toolbar">
+        <button className="btn btn-block" onClick={onCancel}>{t('common_cancel')}</button>
+        <button className="btn btn-danger btn-block" onClick={() => setDeclined(true)}>Declined</button>
+        <button className="btn btn-primary btn-block" onClick={() => onConfirm({ method: 'CARD', amount: remaining, reference })}>
+          Approved
+        </button>
+      </div>
     </div>
   )
 }

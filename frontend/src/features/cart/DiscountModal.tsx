@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { X } from 'lucide-react'
 import { useAuth } from '../../app/AuthContext'
 import { useSettings } from '../../app/SettingsContext'
 import { api, ApiError } from '../../services/api'
@@ -49,7 +50,7 @@ export function DiscountModal({ onApply, onClose, currentType, currentAmount, cu
       <div className="modal" style={{ maxWidth: 380 }} onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
           <h2>Order Discount</h2>
-          <button className="btn btn-icon btn-ghost" onClick={onClose}>✕</button>
+          <button className="btn btn-icon btn-ghost" onClick={onClose}><X size={18} /></button>
         </div>
         <div className="modal-body stack">
           <div className="toolbar">

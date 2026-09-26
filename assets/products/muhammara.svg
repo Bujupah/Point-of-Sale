@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+<rect width="200" height="200" rx="24" fill="#f7e2d6"/>
+<ellipse cx="100" cy="112" rx="72" ry="48" fill="#fdf9f2" stroke="#e8dfd0" stroke-width="2"/>
+<ellipse cx="100" cy="110" rx="54" ry="30" fill="#a8391f" opacity="1"/>
+<circle cx="93.6" cy="108.6" r="3.2" fill="#6b3a1e" opacity="1"/>
+<circle cx="111.3" cy="99.8" r="3.2" fill="#6b3a1e" opacity="1"/>
+<circle cx="100.6" cy="114.5" r="3.2" fill="#6b3a1e" opacity="1"/>
+<circle cx="84.3" cy="98.7" r="3.2" fill="#6b3a1e" opacity="1"/>
+<circle cx="115.1" cy="108.3" r="3.2" fill="#6b3a1e" opacity="1"/>
+<circle cx="93.8" cy="111.2" r="3.2" fill="#6b3a1e" opacity="1"/>
+<circle cx="102.3" cy="96.5" r="3.2" fill="#6b3a1e" opacity="1"/>
+<circle cx="107.2" cy="114.1" r="3.2" fill="#6b3a1e" opacity="1"/>
+<circle cx="76.8" cy="105.1" r="3.2" fill="#6b3a1e" opacity="1"/>
+<circle cx="114.4" cy="102.9" r="3.2" fill="#6b3a1e" opacity="1"/>
+<polyline points="100.0,112.0 100.6,112.1 101.0,112.3 101.4,112.5 101.5,112.9 101.4,113.3 101.0,113.8 100.4,114.2 99.5,114.5 98.4,114.7 97.2,114.7 95.8,114.5 94.5,114.2 93.3,113.6 92.3,112.9 91.5,112.0 91.2,111.0 91.2,109.9 91.8,108.7 92.8,107.6 94.4,106.6 96.3,105.8 98.7,105.2 101.4,104.9 104.2,104.9 107.1,105.3 109.8,106.0 112.3,107.1 114.4,108.5 116.0,110.1 116.9,112.0 117.1,114.0 116.5,116.0 115.1,118.0 112.8,119.8 109.9,121.4 106.3,122.6 102.2,123.4 97.8,123.7 93.2,123.5" fill="none" stroke="#5c2a12" stroke-width="1.6" stroke-linecap="round" opacity="0.85"/>
+</svg>

@@ -1,5 +1,7 @@
 // Shared numeric keypad (brief §25's cash keypad, also reused for PIN entry
 // and any other numeric input) — one component, several call sites.
+import { Delete } from 'lucide-react'
+
 interface Props {
   onDigit: (digit: string) => void
   onBackspace: () => void
@@ -29,8 +31,8 @@ export function NumericKeypad({ onDigit, onBackspace, onClear, allowDecimal = tr
       <button type="button" className="btn keypad-key" onClick={() => onDigit('0')}>
         0
       </button>
-      <button type="button" className="btn keypad-key" onClick={onBackspace}>
-        ⌫
+      <button type="button" className="btn keypad-key" onClick={onBackspace} aria-label="Backspace">
+        <Delete size={20} />
       </button>
     </div>
   )

@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { X } from 'lucide-react'
 import { api, qs } from '../../services/api'
 import type { Customer } from '../../types'
 
@@ -26,7 +27,7 @@ export function CustomerSelectorModal({ onSelect, onClose }: { onSelect: (c: Cus
       <div className="modal" style={{ maxWidth: 420 }} onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
           <h2>Add Customer</h2>
-          <button className="btn btn-icon btn-ghost" onClick={onClose}>✕</button>
+          <button className="btn btn-icon btn-ghost" onClick={onClose}><X size={18} /></button>
         </div>
         <div className="modal-body">
           {creating ? (

@@ -88,8 +88,18 @@ func main() {
 		Reports: reportsSvc, Printing: printingSvc, GiftCards: giftCardsSvc, Settings: settingsSvc, Log: auditLogger,
 	}
 
+	if err := os.MkdirAll(cfg.Assets, 0o755); err != nil {
+		log.Fatalf("startup: create assets directory: %v", err)
+	}
+
 	mux := http.NewServeMux()
 	app.RegisterRoutes(mux)
+	// Locally stored product/UI images (brief §49): served straight off
+	// disk, never hot-linked, so the catalog keeps working with no network
+	// at all once a machine has been set up. Mounted at "/media/", not
+	// "/assets/" — the built frontend's own JS/CSS bundle lives under
+	// frontend/dist/assets/ (Vite's default), and "/assets/" would shadow it.
+	mux.Handle("/media/", http.StripPrefix("/media/", http.FileServer(http.Dir(cfg.Assets))))
 	mux.Handle("/", frontendHandler(cfg.Frontend))
 
 	addr := cfg.Server.Host + ":" + strconv.Itoa(cfg.Server.Port)
